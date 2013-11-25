@@ -3,6 +3,20 @@
 REBAR=$(PWD)/rebar
 RETEST=$(PWD)/deps/retest/retest
 
+prefix="/usr/local/bin"
+
+epoch=$(shell date +%s)
+year=$(shell date +%Y)
+
+vendor="jacknyfe"
+license="Copyright ${year} by Jacknyfe Inc. All Rights Reserved"
+url="http://aboutecho.com/"
+
+project_name="rebar"
+project_version=$(shell git describe --always --tags)
+
+commit_hash=$(shell git log -n 1 --format="%H")
+
 all:
 	./bootstrap
 
@@ -42,3 +56,17 @@ test:
 	@$(RETEST) -v inttest
 
 travis: clean debug xref clean all deps test
+
+rpm: clean all
+	fpm -s dir \
+		-t rpm \
+		-a all \
+		--prefix=${prefix} \
+		--vendor=${vendor} \
+		--license=${license} \
+		--url=${url} \
+		--epoch=${epoch} \
+		--name=${project_name} \
+		--version=${project_version} \
+		--provides=${project_name} \
+		./rebar
