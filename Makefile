@@ -8,9 +8,8 @@ prefix="/usr/local/bin"
 epoch=$(shell date +%s)
 year=$(shell date +%Y)
 
-vendor="jacknyfe"
-license="Copyright ${year} by Jacknyfe Inc. All Rights Reserved"
-url="http://aboutecho.com/"
+vendor="basho"
+url="http://basho.com/"
 
 project_name="rebar"
 project_version=$(shell git describe --always --tags)
@@ -63,7 +62,6 @@ rpm: clean all
 		-a all \
 		--prefix=${prefix} \
 		--vendor=${vendor} \
-		--license=${license} \
 		--url=${url} \
 		--epoch=${epoch} \
 		--name=${project_name} \
