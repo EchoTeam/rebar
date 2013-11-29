@@ -626,9 +626,13 @@ update_deps_int(Config0, UDD) ->
                                                                                 depowner,
                                                                                 dict:new()))),
 
-                        {Config5, Res} = update_deps_int(Config4, Updated),
-                        {Config5, lists:umerge(lists:sort(Res),
-                                               lists:sort(Updated))}
+                        case rebar_config:get_global(Config4, ignore_deps, "false") of
+                            "true" -> {Config4, Updated};
+                            _ ->
+                                {Config5, Res} = update_deps_int(Config4, Updated),
+                                {Config5, lists:umerge(lists:sort(Res),
+                                                    lists:sort(Updated))}
+                        end
                 end, {Config1, lists:umerge(lists:sort(UpdatedDeps),
                                             lists:sort(UDD))}, UpdatedDeps).
 
